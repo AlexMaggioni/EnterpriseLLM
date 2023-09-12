@@ -8,7 +8,6 @@
 
     const dispatch = createEventDispatcher();
     const checkedItemsCount = writable(0);
-    const selectedChat = writable(null);
 
     let showSidebar = true;
     let deleteChats = false;
@@ -16,6 +15,11 @@
     let unselectAll = false;
     let confirmedDeletion;
     export let chats;
+    const selectedChat = writable(chats && chats.length > 0 ? chats[0].id : null);
+
+    $: {
+        dispatch('selectedChatChanged', $selectedChat);
+    }
 
     $: confirmedDeletion = $checkedItemsCount > 0;
 

@@ -5,7 +5,8 @@
    import { blur, fade, slide } from 'svelte/transition';
 
    export let showSidebar;
-   export let chats;
+   export let chat;
+
    import { createEventDispatcher } from 'svelte';
    const dispatch = createEventDispatcher();
 
@@ -27,8 +28,15 @@
 
 <div class="flex flex-col w-full h-screen overflow-y-auto scrollbar-trigger relative transition-all ease-out">
    <div class="mb-auto">
-      <User message={`Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid recusandae iusto repudiandae nam laborum nesciunt nemo ducimus. Nesciunt hic quibusdam iusto aperiam magnam, sunt repellat. Optio nulla doloremque doloribus quis.`}/>
-      <Model message={`Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid recusandae iusto repudiandae nam laborum nesciunt nemo ducimus. Nesciunt hic quibusdam iusto aperiam magnam, sunt repellat. Optio nulla doloremque doloribus quis.`}/>
+      {#if chat}
+         {#each chat.messages as message}
+            {#if message.isUser}
+               <User message={message.content}/>
+            {:else}
+               <Model message={message.content}/>
+            {/if}
+         {/each}
+      {/if}
    </div>
    <Send />
 </div>
