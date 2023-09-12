@@ -1,4 +1,5 @@
 // Get Cosmos Client
+import 'dotenv/config'
 import { CosmosClient } from "@azure/cosmos";
 
 const key = process.env.COSMOS_KEY;
