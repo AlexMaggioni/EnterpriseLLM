@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-feature-settings: normal;
+    font-family: Söhne, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    font-variation-settings: normal;
+    font-weight: 400;
+    overflow-y: hidden;
+    --tw-bg-opacity: 1;
+    background-color: rgb(52 53 64 / var(--tw-bg-opacity));
+}
+
+.scrollbar-trigger::-webkit-scrollbar-thumb {
+    --tw-border-opacity: 1;
+    background-color: rgba(217,217,227,0);
+    border-color: rgba(255,255,255,var(--tw-border-opacity));
+    border-radius: 9999px;
+    border-width: 1px;
+}
+
+.scrollbar-trigger::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 9999px;
+}
+
+.scrollbar-trigger:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(217,217,227,.8);
+}
+
+.scrollbar-trigger::-webkit-scrollbar {
+    height: 1rem;
+    width: .5rem;
+}
+
+.scrollbar-trigger {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(217, 217, 227, 0) transparent;
+}
+
+.scrollbar-trigger:hover {
+    scrollbar-color: rgba(217, 217, 227, 0.8) transparent;
+}
+
+.gradient-adjusted::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0px; /* Adjust this value to determine how much lower the gradient should start */
+    background: inherit; /* This assumes the background color above the gradient is consistent. Adjust if necessary. */
+    z-index: 0;
+}
+ 
