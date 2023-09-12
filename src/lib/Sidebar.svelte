@@ -8,12 +8,14 @@
 
     const dispatch = createEventDispatcher();
     const checkedItemsCount = writable(0);
+    const selectedChat = writable(null);
 
     let showSidebar = true;
     let deleteChats = false;
     let selectAll = false;
     let unselectAll = false;
     let confirmedDeletion;
+    export let chats;
 
     $: confirmedDeletion = $checkedItemsCount > 0;
 
@@ -95,7 +97,9 @@
                 <span>
                     <div class="relative" style="height: auto; opacity: 1;" transition:slide={{duration: 200}}>
                         <ol>
-                            <HistoryItem {deleteChats} {selectAll} {checkedItemsCount}/>
+                            {#each chats as chat}
+                                <HistoryItem {deleteChats} {selectAll} {checkedItemsCount} {chat} {selectedChat}/>    
+                            {/each}
                         </ol>
                     </div>
                 </span>

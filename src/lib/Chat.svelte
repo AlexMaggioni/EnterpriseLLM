@@ -5,6 +5,7 @@
    import { blur, fade, slide } from 'svelte/transition';
 
    export let showSidebar;
+   export let chats;
    import { createEventDispatcher } from 'svelte';
    const dispatch = createEventDispatcher();
 

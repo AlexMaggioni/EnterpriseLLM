@@ -7,14 +7,16 @@
     function handletoggleSidebar(event) {
         showSidebar = event.detail;
     }
+
+    export let data;
+    const chats = data.chats
 </script>
 
 <div class="flex">
 
     {#if showSidebar}
-        <Sidebar on:toggleSidebar={handletoggleSidebar}/>
+        <Sidebar chats={chats} on:toggleSidebar={handletoggleSidebar}/>
     {/if}
 
-    <Chat showSidebar={showSidebar} on:toggleSidebar={handletoggleSidebar}/>
-
+    <Chat chats={chats} showSidebar={showSidebar} on:toggleSidebar={handletoggleSidebar}/>
 </div>
