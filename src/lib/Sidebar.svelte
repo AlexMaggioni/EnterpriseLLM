@@ -46,7 +46,7 @@
     };
 
     async function deleteItemsByIds() {
-        const response = await fetch(`/api/user/alex.maggioni@cooperators.ca`, {
+        const response = await fetch(`/api/user/alex.maggioni@cooperators.ca/deleteChats`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ids: $toDeleteChatId })
