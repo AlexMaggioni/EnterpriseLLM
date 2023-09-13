@@ -33,6 +33,11 @@
     };
 
     function toggleSelectionAll() {
+        
+        if (chats.length === 0){
+            return;
+        };
+
         selectAll = !selectAll;
         if (selectAll) {
             chats.forEach(chat => {
@@ -45,7 +50,7 @@
         }
     };
 
-    async function deleteItemsByIds() {
+    async function deleteChatsByIds() {
         const response = await fetch(`/api/user/alex.maggioni@cooperators.ca/deleteChats`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -66,7 +71,30 @@
         };
         
         $toDeleteChatId.length = 0;
+        
+        if (selectAll){
+            selectAll = !selectAll;
+        };
+
+        dispatch('updateChats', chats);
     };
+
+    async function createNewChat() {
+        const userId = 'alex.maggioni@cooperators.ca'; // this should be dynamic based on the user's profile or context
+        const response = await fetch(`/api/user/${userId}/newChat`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message);
+
+        chats = [...chats, data];  
+        selectedChat.set(data.id);
+
+        dispatch('updateChats', chats);
+    };
+
 </script>
 
 
@@ -77,7 +105,7 @@
         
         <div class="flex flex-row gap-2">
             <!-- New Chat Button -->
-            <button class="flex px-3 py-2 items-center gap-3 transition-colors duration-200 text-gray-100 cursor-pointer text-sm rounded-md border border-white/20 hover:bg-gray-500/10 h-11 flex-shrink-0 flex-grow">
+            <button on:click={createNewChat} class="flex px-3 py-2 items-center gap-3 transition-colors duration-200 text-gray-100 cursor-pointer text-sm rounded-md border border-white/20 hover:bg-gray-500/10 h-11 flex-shrink-0 flex-grow">
                 <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -116,7 +144,7 @@
             </button>
 
             <!-- Confirm deletion -->
-            <button on:click={deleteItemsByIds} class="flex mb-2 py-2 transition-colors duration-300 text-gray-100 cursor-pointer text-sm rounded-md border {confirmedDeletion ? "bg-green-700 hover:bg-green-700/60" : "hover:bg-gray-500/10"} border-white/20 h-11 w-11 flex-shrink-0 items-center justify-center" transition:slide={{duration: 300}}>
+            <button on:click={deleteChatsByIds} class="flex mb-2 py-2 transition-colors duration-300 text-gray-100 cursor-pointer text-sm rounded-md border {confirmedDeletion ? "bg-green-700 hover:bg-green-700/60" : "hover:bg-gray-500/10"} border-white/20 h-11 w-11 flex-shrink-0 items-center justify-center" transition:slide={{duration: 300}}>
                 <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>

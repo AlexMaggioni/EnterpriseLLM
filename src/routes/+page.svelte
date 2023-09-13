@@ -9,20 +9,25 @@
     }
 
     export let data;
-    const chats = data.chats;
+    let chats = data.chats;
     
     let selectedChatId = chats && chats.length > 0 ? chats[0].id : null;    
     
     function handleSelectedChatChanged(event) {
         selectedChatId = event.detail;
-    }
+    };
+
+    function handleUpdateChats(event) {
+        chats = event.detail;
+        console.log(chats);
+    };
 
     $: selectedChat = chats.find(chat => chat.id === selectedChatId);
 </script>
 
 <div class="flex">
     {#if showSidebar}
-        <Sidebar chats={chats} on:toggleSidebar={handletoggleSidebar} on:selectedChatChanged={handleSelectedChatChanged}/>
+        <Sidebar chats={chats} on:toggleSidebar={handletoggleSidebar} on:selectedChatChanged={handleSelectedChatChanged} on:updateChats={handleUpdateChats}/>
     {/if}
 
     <Chat showSidebar={showSidebar} chat={selectedChat} on:toggleSidebar={handletoggleSidebar}/>
