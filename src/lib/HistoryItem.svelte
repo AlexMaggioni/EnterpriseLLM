@@ -1,44 +1,25 @@
 <script>
+    export let toDeleteChatId;
     export let deleteChats;
-    export let selectAll;
-    let prevSelectAll = selectAll;
-    export let checkedItemsCount;
     export let selectedChat;
-    let checked = false;
     export let chat;
+
     $: selected = $selectedChat === chat.id;
-    
-    $: if (prevSelectAll !== selectAll) {
-        if (selectAll) {
-            if (!checked) {
-                checked = true;
-                $checkedItemsCount += 1;
-            }
+    $: checked = $toDeleteChatId.includes(chat.id);
+
+    function toggleChecked() {
+        if (checked) {
+            toDeleteChatId.update(ids => ids.filter(id => id !== chat.id));
         } else {
-            if (checked) {
-                checked = false;
-                $checkedItemsCount -= 1;
-            }
+            toDeleteChatId.update(ids => [...ids, chat.id]);
         }
-        prevSelectAll = selectAll;
-    }
-
-    function toggleChecked(){
-        checked = !checked;
-
-        if (checked){
-            $checkedItemsCount += 1;
-        }
-
-        else {
-            $checkedItemsCount -= 1;
-        }
-    }
+    };
 
     function selectChat() {
         $selectedChat = chat.id;
-    }
+    };
 </script>
+
 
 {#if deleteChats}
 

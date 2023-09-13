@@ -1,41 +1,72 @@
 <script>
-    import HistoryItem from "./HistoryItem.svelte";
-    import Profile from "./Profile.svelte";
-    
     import { createEventDispatcher } from 'svelte';
     import { slide } from 'svelte/transition';
     import { writable } from 'svelte/store';
+    import HistoryItem from "./HistoryItem.svelte";
+    import Profile from "./Profile.svelte";
 
     const dispatch = createEventDispatcher();
-    const checkedItemsCount = writable(0);
+    const toDeleteChatId = writable([]);
+    const selectedChat = writable(null);
 
     let showSidebar = true;
     let deleteChats = false;
     let selectAll = false;
-    let unselectAll = false;
-    let confirmedDeletion;
     export let chats;
-    const selectedChat = writable(chats && chats.length > 0 ? chats[0].id : null);
 
-    $: {
-        dispatch('selectedChatChanged', $selectedChat);
-    }
+    if (chats && chats.length > 0) {
+        selectedChat.set(chats[0].id);
+    } else {
+        selectedChat.set(null);
+    };
 
-    $: confirmedDeletion = $checkedItemsCount > 0;
+    $: dispatch('selectedChatChanged', $selectedChat);
+    $: confirmedDeletion = $toDeleteChatId.length > 0;
 
     function toggleSidebar() {
         showSidebar = !showSidebar;
         dispatch('toggleSidebar', showSidebar);
-    }
+    };
 
     function toggleDeleteChats() {
         deleteChats = !deleteChats;
-    }
+    };
 
-    function toggleSelectionAll() {    
+    function toggleSelectionAll() {
         selectAll = !selectAll;
-        unselectAll = !unselectAll;
-    }
+        if (selectAll) {
+            chats.forEach(chat => {
+                if (!$toDeleteChatId.includes(chat.id)) {
+                    toDeleteChatId.update(ids => [...ids, chat.id]);
+                }
+            });
+        } else {
+            $toDeleteChatId.length = 0;
+        }
+    };
+
+    async function deleteItemsByIds() {
+        const response = await fetch(`/api/user/alex.maggioni@cooperators.ca`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids: $toDeleteChatId })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message);
+
+        chats = data;
+
+        if ($toDeleteChatId.includes($selectedChat)) {
+            if (chats && chats.length > 0) {
+                selectedChat.set(chats[0].id);
+            } else {
+                selectedChat.set(null);
+            }
+        };
+        
+        $toDeleteChatId.length = 0;
+    };
 </script>
 
 
@@ -85,7 +116,7 @@
             </button>
 
             <!-- Confirm deletion -->
-            <button class="flex mb-2 py-2 transition-colors duration-300 text-gray-100 cursor-pointer text-sm rounded-md border {confirmedDeletion ? "bg-green-700 hover:bg-green-700/60" : "hover:bg-gray-500/10"} border-white/20 h-11 w-11 flex-shrink-0 items-center justify-center" transition:slide={{duration: 300}}>
+            <button on:click={deleteItemsByIds} class="flex mb-2 py-2 transition-colors duration-300 text-gray-100 cursor-pointer text-sm rounded-md border {confirmedDeletion ? "bg-green-700 hover:bg-green-700/60" : "hover:bg-gray-500/10"} border-white/20 h-11 w-11 flex-shrink-0 items-center justify-center" transition:slide={{duration: 300}}>
                 <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
@@ -102,7 +133,7 @@
                     <div class="relative" style="height: auto; opacity: 1;" transition:slide={{duration: 200}}>
                         <ol>
                             {#each chats as chat}
-                                <HistoryItem {deleteChats} {selectAll} {checkedItemsCount} {chat} {selectedChat}/>    
+                                <HistoryItem {deleteChats} {selectAll} {chat} {selectedChat} {toDeleteChatId}/>
                             {/each}
                         </ol>
                     </div>
