@@ -14,6 +14,24 @@
    function toggleSidebar() {
        dispatch('toggleSidebar', !showSidebar);
    }
+
+   async function handlesubmitText(event) {
+      
+      const message = event.detail;
+      
+      const response = await fetch(`/api/user/alex.maggioni@cooperators.ca/addUserMessage`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+               id: chat.id,
+               message : message
+            })
+        });
+
+      const data = await response.json();
+      dispatch('updateChats', data);
+   };
+   
 </script>
 
 {#if !showSidebar}
@@ -51,5 +69,5 @@
    
    {/if}
 
-   <Send />
+   <Send on:submitText={handlesubmitText}/>
 </div>

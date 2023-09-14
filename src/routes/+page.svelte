@@ -19,7 +19,6 @@
 
     function handleUpdateChats(event) {
         chats = event.detail;
-        console.log(chats);
     };
 
     $: selectedChat = chats.find(chat => chat.id === selectedChatId);
@@ -30,5 +29,5 @@
         <Sidebar chats={chats} on:toggleSidebar={handletoggleSidebar} on:selectedChatChanged={handleSelectedChatChanged} on:updateChats={handleUpdateChats}/>
     {/if}
 
-    <Chat showSidebar={showSidebar} chat={selectedChat} on:toggleSidebar={handletoggleSidebar}/>
+    <Chat showSidebar={showSidebar} chat={selectedChat} on:toggleSidebar={handletoggleSidebar} on:updateChats={handleUpdateChats}/>
 </div>

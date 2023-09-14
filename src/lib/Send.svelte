@@ -1,19 +1,35 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
+
     let textAreaValue = '';
     let textArea;
  
     function adjustHeight(textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
-    }
+        textarea.style.height = 'auto';  // reset the height
+        if (textAreaValue.trim() !== '') {  // only adjust height if there is content
+            textarea.style.height = textarea.scrollHeight + 'px';
+        } else {
+            textarea.style.height = 'initial';  // set back to initial height if empty
+        }
+    };
+
+    function handleSubmit(event){
+        event.preventDefault();
+        dispatch('submitText', textAreaValue);
+        textAreaValue = '';
+        adjustHeight(textArea);
+    };
 </script>
 
 <div class="min-h-[200px] max-h-[200px] w-full px-4 md:px-8 fixed-send sticky bottom-0 left-0 right-0 z-100 fade-gradient">
     <div class="mt-[90px] pl-2 max-w-[875px] mx-auto">
-        <form class="mx-2 flex flex-row gap-3 last:mb-2 md:mx-4 md:last:mb-6">
+        <form class="mx-2 flex flex-row gap-3 last:mb-2 md:mx-4 md:last:mb-6"
+            on:submit={handleSubmit}>
             <div class="flex h-full flex-1 items-stretch md:flex-col" role="presentation">
                 <div class="flex flex-col-reverse w-full py-2.5 flex-grow md:py-4 md:pl-4 relative border border-black/10 dark:border-gray-900/50 dark:text-white bg-[#40414f] rounded-xl shadow-lg">
                     <textarea 
+                        on:keydown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { handleSubmit(e); } }}
                         bind:this={textArea}
                         bind:value={textAreaValue} 
                         on:input={() => adjustHeight(textArea)}
@@ -22,7 +38,7 @@
                         placeholder="Send a message"
                         class="scrollbar-trigger placeholder-[#8e8ea0] resize-none m-0 w-full border-0 bg-transparent p-0 pr-10 focus:ring-0 focus-visible:ring-0 focus:shadow-none focus:outline-none dark:bg-transparent md:pr-12 pl-3 md:pl-0"
                         style="max-height: 200px; overflow-y: auto;"></textarea>
-                    <button 
+                    <button type="submit"
                         class="group absolute p-1 rounded-md md:bottom-3 md:p-2 md:right-3 
                             {textAreaValue.trim() ? 'bg-[#0768af]' : 'bg-transparent'} 
                             right-2 bottom-1.5 transition-colors">
