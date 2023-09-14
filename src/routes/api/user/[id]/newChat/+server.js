@@ -23,10 +23,10 @@ export async function PATCH(request) {
     };
 
     // Append the new chat to the user's chats array
-    user.chats.push(newChat);
+    user.chats.unshift(newChat);
 
     // Update the user's data in Cosmos DB
     await containerClient.item(id).replace(user);
 
     return json(newChat);
-}
+};

@@ -89,7 +89,7 @@
         const data = await response.json();
         if (!response.ok) throw new Error(data.message);
 
-        chats = [...chats, data];  
+        chats = [data, ...chats];  
         selectedChat.set(data.id);
 
         dispatch('updateChats', chats);

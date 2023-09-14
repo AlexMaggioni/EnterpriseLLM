@@ -53,4 +53,9 @@ body {
     background: inherit; /* This assumes the background color above the gradient is consistent. Adjust if necessary. */
     z-index: 0;
 }
- 
+
+.coop-font {
+    font-family: 'Söhne', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    font-weight: 650;
+    line-height: 1.111;
+}

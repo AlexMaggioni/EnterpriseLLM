@@ -2,7 +2,8 @@
    import Model from "./Model.svelte";
    import User from "./User.svelte";
    import Send from "./Send.svelte"
-   import { blur, fade, slide } from 'svelte/transition';
+   import img from '$lib/images/coop_grey.png';
+   import { fade } from 'svelte/transition';
 
    export let showSidebar;
    export let chat;
@@ -27,8 +28,10 @@
 {/if}
 
 <div class="flex flex-col w-full h-screen overflow-y-auto scrollbar-trigger relative transition-all ease-out">
-   <div class="mb-auto">
-      {#if chat}
+   
+   {#if chat.messages.length > 0}  
+
+      <div class="mb-auto">
          {#each chat.messages as message}
             {#if message.isUser}
                <User message={message.content}/>
@@ -36,8 +39,17 @@
                <Model message={message.content}/>
             {/if}
          {/each}
-      {/if}
-   </div>
+      </div>
+
+   {:else}
+
+      <div class="mb-auto flex items-center justify-center">
+         <h1 class="text-4xl text-right pr-4 pt-[220px] w-[250px] h-[65px] coop-font text-[#565869] relative bg-inherit">CoopLlama
+            <img src={img} alt="CoopLlama logo" class="absolute top-[225px] right-[216px] w-[35px] h-[35px] rounded-full"/>
+         </h1>
+      </div>
+   
+   {/if}
+
    <Send />
 </div>
-
