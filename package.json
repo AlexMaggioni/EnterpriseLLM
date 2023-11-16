@@ -28,6 +28,7 @@
 		"@azure/cosmos": "^3.17.3",
 		"@azure/identity": "^3.3.0",
 		"dotenv": "^16.3.1",
+		"node-fetch": "^3.3.2",
 		"svelte-markdown": "^0.3.0"
 	}
 }

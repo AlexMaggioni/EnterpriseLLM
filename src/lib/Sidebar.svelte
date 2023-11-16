@@ -51,6 +51,11 @@
     };
 
     async function deleteChatsByIds() {
+
+        if ($toDeleteChatId.length === chats.length) {
+            await createNewChat(); // Create a new chat before deleting all the existing ones
+        }
+
         const response = await fetch(`/api/user/alex.maggioni@cooperators.ca/deleteChats`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },

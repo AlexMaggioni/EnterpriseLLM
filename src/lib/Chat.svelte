@@ -19,7 +19,7 @@
       
       const message = event.detail;
       
-      const response = await fetch(`/api/user/alex.maggioni@cooperators.ca/addUserMessage`, {
+      const user_response = await fetch(`/api/user/alex.maggioni@cooperators.ca/addUserMessage`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -28,8 +28,20 @@
             })
         });
 
-      const data = await response.json();
-      dispatch('updateChats', data);
+      const user_update = await user_response.json();
+      dispatch('updateChats', user_update);
+
+      const model_response = await fetch(`/api/user/alex.maggioni@cooperators.ca/modelInference`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+               id: chat.id,
+               message : message
+            })
+        });
+
+      const model_update = await model_response.json();
+      dispatch('updateChats', model_update);
    };
    
 </script>

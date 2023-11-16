@@ -23,6 +23,12 @@ export async function PATCH({ request, params }) {
         isUser: true
     });
 
+    chat.messages.push({
+        content: "...",
+        timestamp: timestamp,
+        isUser: false
+    });
+
     // Update the user with the new chat data
     await containerClient.item(id, id).replace(user);
     return json(chats);
