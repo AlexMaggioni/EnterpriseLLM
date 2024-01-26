@@ -3,8 +3,8 @@ import fetch from 'node-fetch';
 import { containerClient } from '../../../database.js';
 
 // Replace with your actual Azure ML Studio endpoint and API key
-const azureMLEndpoint = 'https://lmdeploy-laxum.canadacentral.inference.ml.azure.com/score';
-const azureMLApiKey = 'oQY3gLEXdsBcJ4KsBixqyAkzovlXQx3X';
+const azureMLEndpoint = process.env.AZUREML_KEY;
+const azureMLApiKey = process.env.AZUREML_ENDPOINT;
 
 export async function PATCH({ request, params }) {
     const rawData = await request.text();
@@ -18,12 +18,11 @@ export async function PATCH({ request, params }) {
     const requestBody = {
         "input_data": {
             "input_string": [
-                // Include previous conversation history here if needed
                 {
                     "role": "user",
                     "content": messageContent
                 }
-                // You can add more conversation history here
+                // Maybe add more conversation history here
             ],
             "parameters": {
                 "temperature": 0.6,
@@ -34,17 +33,29 @@ export async function PATCH({ request, params }) {
         }
     };
 
-    // Fetch response from Azure ML Studio
-    const azureResponse = await fetch(azureMLEndpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${azureMLApiKey}`
-        },
-        body: JSON.stringify(requestBody)
-    });
+    let modelResponse;
 
-    const modelResponse = await azureResponse.json();
+    try {
+        // Fetch response from Azure ML Studio
+        const azureResponse = await fetch(azureMLEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${azureMLApiKey}`
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!azureResponse.ok) {
+            throw new Error(`Error from Azure ML Studio: ${azureResponse.status} ${azureResponse.statusText}`);
+        }
+
+        modelResponse = await azureResponse.json();
+
+    } catch (error) {
+        // Handle the error by setting it as the model's response
+        modelResponse = { output: `Error: ${error.message}` };
+    }
 
     // Read the user and chat object
     const { resource: user } = await containerClient.item(id, id).read();
@@ -55,7 +66,7 @@ export async function PATCH({ request, params }) {
 
     const lastMessage = chat.messages[chat.messages.length - 1];
     if (lastMessage && !lastMessage.isUser && lastMessage.content === "...") {
-        // Replace the last message content with model's response
+        // Replace the last message content with model's or error response
         lastMessage.content = modelResponse.output;
         lastMessage.timestamp = timestamp;
     } else {

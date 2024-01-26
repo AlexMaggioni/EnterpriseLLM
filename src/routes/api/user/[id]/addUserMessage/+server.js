@@ -16,6 +16,10 @@ export async function PATCH({ request, params }) {
 
     const timestamp = new Date().toISOString();
 
+    if (chat.messages.length == 0){
+        chat.title = messageContent;
+    }
+
     // Push a new message to the chat's messages array
     chat.messages.push({
         content: messageContent,
