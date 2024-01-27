@@ -1,10 +1,11 @@
 import { json } from '@sveltejs/kit';
 import fetch from 'node-fetch';
 import { containerClient } from '../../../database.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
-// Replace with your actual Azure ML Studio endpoint and API key
-const azureMLEndpoint = process.env.AZUREML_KEY;
-const azureMLApiKey = process.env.AZUREML_ENDPOINT;
+const azureMLApiKey = process.env.AZUREML_KEY;
+const azureMLEndpoint = process.env.AZUREML_ENDPOINT;
 
 export async function PATCH({ request, params }) {
     const rawData = await request.text();
