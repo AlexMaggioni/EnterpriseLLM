@@ -74,7 +74,7 @@
    {:else}
 
       <div class="mb-auto flex items-center justify-center">
-         <h1 class="text-4xl text-right pr-4 pt-[220px] w-[250px] h-[65px] coop-font text-[#565869] relative bg-inherit">CoopLlama
+         <h1 class="text-4xl text-right pl-10 pr-4 pt-[220px] w-[250px] h-[65px] coop-font text-[#565869] relative bg-inherit">EnterpriseLLM
             <img src={img} alt="CoopLlama logo" class="absolute top-[225px] right-[216px] w-[35px] h-[35px] rounded-full"/>
          </h1>
       </div>
