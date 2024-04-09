@@ -19,6 +19,56 @@ npm run dev
 ```
 Tadam! You can now test it out!
 
+**Object Structure for Database Objects:**
+
+Below is the JSON structure used to represent user chat data in the database. Note that some fields, like timestamps, are dynamically generated according to the logic implemented in the code. The database also automatically creates certain system fields (e.g., `_rid`, `_etag`, etc.) that do not require manual intervention.
+
+```json
+{
+    "id": "your_username@enterprise.com",
+    "chats": [
+        {
+            "title": "",
+            "created": "[Timestamp logic implemented in code]",
+            "messages": [
+                {
+                    "content": "User input chat 1 ...",
+                    "timestamp": "[Timestamp logic implemented in code]",
+                    "isUser": true
+                },
+                {
+                    "content": "Model response",
+                    "timestamp": "[Timestamp logic implemented in code]",
+                    "isUser": false
+                }
+            ]
+        },
+        {
+            "title": "Write me an email",
+            "created": "2023-09-10T20:16:00.596Z",
+            "messages": [
+                {
+                    "content": "User input chat 2 ...",
+                    "timestamp": "[Timestamp logic implemented in code]",
+                    "isUser": true
+                },
+                {
+                    "content": "Model response",
+                    "timestamp": "[Timestamp logic implemented in code]",
+                    "isUser": false
+                }
+            ]
+        }
+    ]
+    // No intervention needed for the following fields (automatically created by the database)
+    "_rid": null,
+    "_self": null,
+    "_etag": null,
+    "_attachments": null,
+    "_ts": null
+}
+```
+
 
 ## Preparing for Production Deployment
 
